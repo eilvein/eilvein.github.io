@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="description" content="eilvein">
+
+
+    <meta name="keywords" content="eilvein">
+
+
+<title>移动端页面设计规范 | 标题</title>
+
+
+
+    <link rel="icon" href="/favicon.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Eilvein&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Eilvein&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">移动端页面设计规范</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Eilvein</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 16, 2014&nbsp;&nbsp;19:10:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Front-End/">Front-End</a>
+                            
+                                <a href="/categories/Front-End/UI/">UI</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>自Apple发布了iPhone 6 Plus. 新的iPhone大幅改变了图像在屏幕上渲染的方式。移动页面尺寸的适配一直是前端和设计的头疼。下面是我总结一下当前市场上的一些移动端尺寸，方便设计师和前端去考虑适配。</p>
+<h4 id="iPhone的设计尺寸"><a href="#iPhone的设计尺寸" class="headerlink" title="iPhone的设计尺寸"></a>iPhone的设计尺寸</h4><h5 id="iPhone界面尺寸"><a href="#iPhone界面尺寸" class="headerlink" title="iPhone界面尺寸:"></a>iPhone界面尺寸:</h5><table>
+<thead>
+<tr>
+<th>设备</th>
+<th align="center">分辨率</th>
+<th align="center">状态栏高度</th>
+<th align="center">导航栏高度</th>
+<th align="center">工具栏高度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iPhone6 plus渲染像素</td>
+<td align="center">1242 × 2208</td>
+<td align="center">60px</td>
+<td align="center">132px</td>
+<td align="center">146px</td>
+</tr>
+<tr>
+<td>iPhone6 plus物理像素</td>
+<td align="center">1080 × 1920</td>
+<td align="center">54px</td>
+<td align="center">132px</td>
+<td align="center">146px</td>
+</tr>
+<tr>
+<td>iPhone6</td>
+<td align="center">750 × 1334</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+<tr>
+<td>iPhone5s</td>
+<td align="center">640 × 1136</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+<tr>
+<td>iPhone5c</td>
+<td align="center">640 × 1136</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+<tr>
+<td>iPhone5</td>
+<td align="center">640 × 1136</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+<tr>
+<td>iPhone4s</td>
+<td align="center">640 × 960</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+<tr>
+<td>iPhone4</td>
+<td align="center">640 × 960</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px(88px)</td>
+</tr>
+</tbody></table>
+<p><a href="http://eilvein.qiniudn.com/app.png" target="_blank" rel="noopener"><img src="http://eilvein.qiniudn.com/app.png" alt="iPhone6"></a>iPhone6<br><a href="http://eilvein.qiniudn.com/ios_px.png" target="_blank" rel="noopener"><img src="http://eilvein.qiniudn.com/ios_px.png" alt="界面尺寸"></a>界面尺寸</p>
+<h4 id="iPad的设计尺寸"><a href="#iPad的设计尺寸" class="headerlink" title="iPad的设计尺寸"></a>iPad的设计尺寸</h4><h5 id="iPad界面尺寸："><a href="#iPad界面尺寸：" class="headerlink" title="iPad界面尺寸："></a>iPad界面尺寸：</h5><table>
+<thead>
+<tr>
+<th>设备</th>
+<th align="center">分辨率</th>
+<th align="center">状态栏高度</th>
+<th align="center">导航栏高度</th>
+<th align="center">标签栏高度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iPad6/iPad Air2</td>
+<td align="center">2048 × 1536</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px</td>
+</tr>
+<tr>
+<td>iPad 5/Air /mini 2</td>
+<td align="center">2048 × 1536</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px</td>
+</tr>
+<tr>
+<td>iPad4/ipad mini</td>
+<td align="center">2048 × 1536</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px</td>
+</tr>
+<tr>
+<td>iPad3/the new iPad</td>
+<td align="center">2048 × 1536</td>
+<td align="center">40px</td>
+<td align="center">88px</td>
+<td align="center">98px</td>
+</tr>
+<tr>
+<td>iPad2</td>
+<td align="center">1024 × 768</td>
+<td align="center">20px</td>
+<td align="center">44px</td>
+<td align="center">49px</td>
+</tr>
+<tr>
+<td>iPad1</td>
+<td align="center">1024 × 768</td>
+<td align="center">20px</td>
+<td align="center">44px</td>
+<td align="center">49px</td>
+</tr>
+<tr>
+<td>iPad Mini</td>
+<td align="center">1024 × 768</td>
+<td align="center">20px</td>
+<td align="center">44px</td>
+<td align="center">49px</td>
+</tr>
+</tbody></table>
+<h4 id="Android的设计尺寸"><a href="#Android的设计尺寸" class="headerlink" title="Android的设计尺寸"></a>Android的设计尺寸</h4><h5 id="屏幕尺寸"><a href="#屏幕尺寸" class="headerlink" title="屏幕尺寸"></a>屏幕尺寸</h5><p>指实际的物理尺寸，为屏幕对角线的测量。<br>为了简单起见，Android把实际屏幕尺寸分为四个广义的大小：小，正常，大，特大。</p>
+<h5 id="像素（PX）"><a href="#像素（PX）" class="headerlink" title="像素（PX）"></a>像素（PX）</h5><p>代表屏幕上一个物理的像素点代表屏幕上一个物理的像素点。</p>
+<h5 id="屏幕密度"><a href="#屏幕密度" class="headerlink" title="屏幕密度"></a>屏幕密度</h5><p>为解决Android设备碎片化，引入一个概念DP，也就是密度。指在一定尺寸的物理屏幕上显示像素的数量，通常指分辨率。 为了简单起见，Android把屏幕密度分为了四个广义的大小：<br>低（120dpi）、中（160dpi）、高（240dpi）和超高（320dpi） 像素= DP * （ DPI / 160 )</p>
+<blockquote>
+<p>例如，在一个240dpi的屏幕里，1DP等于1.5PX。</p>
+</blockquote>
+<p>于设计来说，选取一个合适的尺寸作为正常大小和中等屏幕密度（尺寸的选取依据打算适配的硬件，建议参考现主流硬件分辨率），然后向下和向上 做小、大、特大和低、高、超高的尺寸与密度。</p>
+<h4 id="典型的设计尺寸"><a href="#典型的设计尺寸" class="headerlink" title="典型的设计尺寸"></a>典型的设计尺寸</h4><ul>
+<li>320dp：一个普通的手机屏幕（240X320，320×480，480X800）</li>
+<li>480dp：一个中间平板电脑像（480×800）</li>
+<li>600dp：7寸平板电脑（600x1024）</li>
+<li>720dp：10寸平板电脑（720x1280，800x1280）</li>
+</ul>
+<h4 id="Android安卓系统dp-sp-px换算表"><a href="#Android安卓系统dp-sp-px换算表" class="headerlink" title="Android安卓系统dp/sp/px换算表"></a>Android安卓系统dp/sp/px换算表</h4><table>
+<thead>
+<tr>
+<th>名称</th>
+<th align="center">分辨率</th>
+<th align="center">比率 rate (针对320px)</th>
+<th align="center">(针对640px)</th>
+<th align="center">(针对750px)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>idpi</td>
+<td align="center">240 × 320</td>
+<td align="center">0.75</td>
+<td align="center">0.375</td>
+<td align="center">0.32</td>
+</tr>
+<tr>
+<td>mdpi</td>
+<td align="center">320 × 480</td>
+<td align="center">1</td>
+<td align="center">0.5</td>
+<td align="center">0.4267</td>
+</tr>
+<tr>
+<td>hdpi</td>
+<td align="center">480 × 800</td>
+<td align="center">1.5</td>
+<td align="center">0.75</td>
+<td align="center">0.64</td>
+</tr>
+<tr>
+<td>xhdpi</td>
+<td align="center">720 × 1280</td>
+<td align="center">2.25</td>
+<td align="center">1.125</td>
+<td align="center">1.04</td>
+</tr>
+<tr>
+<td>xhdpi</td>
+<td align="center">1080 × 1920</td>
+<td align="center">3.375</td>
+<td align="center">1.6875</td>
+<td align="center">1.5</td>
+</tr>
+</tbody></table>
+<h4 id="主流Android手机分辨率和尺寸"><a href="#主流Android手机分辨率和尺寸" class="headerlink" title="主流Android手机分辨率和尺寸"></a>主流Android手机分辨率和尺寸</h4><table>
+<thead>
+<tr>
+<th>设备</th>
+<th align="center">分辨率</th>
+<th align="center">尺寸</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>三星Galaxy S3</td>
+<td align="center">720 × 1280</td>
+<td align="center">4.8英寸</td>
+</tr>
+<tr>
+<td>三星Galaxy S4</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>三星Galaxy S5</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.1英寸</td>
+</tr>
+<tr>
+<td>三星Galaxy S6</td>
+<td align="center">1200 × 1920</td>
+<td align="center">4.5英寸</td>
+</tr>
+<tr>
+<td>小米1</td>
+<td align="center">480 × 854</td>
+<td align="center">4.0英寸</td>
+</tr>
+<tr>
+<td>小米1s</td>
+<td align="center">480 × 854</td>
+<td align="center">4.0英寸</td>
+</tr>
+<tr>
+<td>小米2</td>
+<td align="center">720 × 1280</td>
+<td align="center">4.3英寸</td>
+</tr>
+<tr>
+<td>小米2s</td>
+<td align="center">720 × 1280</td>
+<td align="center">4.3英寸</td>
+</tr>
+<tr>
+<td>小米3</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>小米3概念</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>小米4</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>红米</td>
+<td align="center">720 × 1280</td>
+<td align="center">4.7英寸</td>
+</tr>
+<tr>
+<td>红米Note</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>OPPO Find 7</td>
+<td align="center">1440 × 2560</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>Find 7 轻装版</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>OPPO N1 mini</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>OPPO R3</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>OPPO R1S</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>华为 P7</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>华为 Mate7</td>
+<td align="center">1080 × 1920</td>
+<td align="center">6.0英寸</td>
+</tr>
+<tr>
+<td>华为 荣耀6</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>华为 荣耀6plus</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>华为 Mate2</td>
+<td align="center">720 × 1280</td>
+<td align="center">6.1英寸</td>
+</tr>
+<tr>
+<td>华为 C199</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>魅族 MX3</td>
+<td align="center">1080 × 1800</td>
+<td align="center">5.1英寸</td>
+</tr>
+<tr>
+<td>魅族 MX4</td>
+<td align="center">1152 × 1920</td>
+<td align="center">5.36英寸</td>
+</tr>
+<tr>
+<td>魅族 MX4pro</td>
+<td align="center">2560×1536</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>HTC One (M8)</td>
+<td align="center">1080 × 1920</td>
+<td align="center">5.0英寸</td>
+</tr>
+<tr>
+<td>HTC Desire 820</td>
+<td align="center">720 × 1280</td>
+<td align="center">5.5英寸</td>
+</tr>
+<tr>
+<td>锤子 T1</td>
+<td align="center">1080 × 1920</td>
+<td align="center">4.95英寸</td>
+</tr>
+</tbody></table>
+<p>============================ 新机型待补充 ==============================</p>
+<h4 id="牛X的分辨率查询"><a href="#牛X的分辨率查询" class="headerlink" title="牛X的分辨率查询"></a>牛X的分辨率查询</h4><p><a href="http://screensiz.es/phone" target="_blank" rel="noopener">screensiz</a><br><a href="http://mydevice.io/devices/" target="_blank" rel="noopener">mydevice</a></p>
+<h3 id="iPhone-6-屏幕揭秘"><a href="#iPhone-6-屏幕揭秘" class="headerlink" title="iPhone 6 屏幕揭秘"></a>iPhone 6 屏幕揭秘</h3><p><a href="http://eilvein.qiniudn.com/ih6_01.jpg" target="_blank" rel="noopener"><img src="http://eilvein.qiniudn.com/ih6_01.jpg" alt="iPhone"></a>iPhone<br><a href="http://eilvein.qiniudn.com//ih6_02.jpg" target="_blank" rel="noopener"><img src="http://eilvein.qiniudn.com//ih6_02.jpg" alt="iPhone"></a>iPhone</p>
+<h4 id="一根线的渲染"><a href="#一根线的渲染" class="headerlink" title="一根线的渲染"></a>一根线的渲染</h4><p>为了说明多种设备的不同像素渲染情况，我们比较了一个一像素宽的线是怎样渲染的：<br>最初的iPhone - 没有高清屏，比例系数是1。<br>iPhone 5 - 有高清屏，比例系数是2。<br>iPhone 6 Plus - 超高清屏（Retina display HD）。比例系数是3，并且图像会先渲染为2208 × 1242像素然后缩小为1920 × 1080像素。<br>缩小的比例是1920 / 2208 = 1080 / 1242 = 20 / 23. 这意味着最初渲染的每23像素会分布到20物理像素中。换句话说图像会缩小为大约原尺寸的87%。</p>
+<p><a href="http://eilvein.qiniudn.com/ih6_03.jpg" target="_blank" rel="noopener"><img src="http://eilvein.qiniudn.com/ih6_03.jpg" alt="iPhone"></a>iPhone</p>
+<p>英文：<a href="http://www.paintcodeapp.com/news/iphone-6-screens-demystified" target="_blank" rel="noopener">来源</a><br>译者：<a href="http://wileam.com/iphone-6-screen-cn/" target="_blank" rel="noopener">小雪-Joanna</a></p>
+<h4 id="HTML5-iPhone6-amp-iPhone6-Plus-CSS3-Media-Queries"><a href="#HTML5-iPhone6-amp-iPhone6-Plus-CSS3-Media-Queries" class="headerlink" title="HTML5 iPhone6&amp;iPhone6 Plus CSS3 Media Queries"></a>HTML5 iPhone6&amp;iPhone6 Plus CSS3 Media Queries</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">media</span> only screen and (min-device-width: <span class="number">375px</span>) and (max-device-width: <span class="number">667px</span>) and (orientation : portrait) &#123;</span><br><span class="line">     <span class="comment">/*iPhone 6 Portrait*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (min-device-width: <span class="number">375px</span>) and (max-device-width: <span class="number">667px</span>) and (orientation : landscape) &#123;</span><br><span class="line">     <span class="comment">/*iPhone 6 landscape*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (min-device-width: <span class="number">414px</span>) and (max-device-width: <span class="number">736px</span>) and (orientation : portrait) &#123;</span><br><span class="line">     <span class="comment">/*iPhone 6+ Portrait*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (min-device-width: <span class="number">414px</span>) and (max-device-width: <span class="number">736px</span>) and (orientation : landscape) &#123;</span><br><span class="line">     <span class="comment">/*iPhone 6+ landscape*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (max-device-width: <span class="number">640px</span>), only screen and (max-device-width: <span class="number">667px</span>), only screen and (max-width: <span class="number">480px</span>)&#123;</span><br><span class="line">     <span class="comment">/*iPhone 6 and iPhone 6+ portrait and landscape*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (max-device-width: <span class="number">640px</span>), only screen and (max-device-width: <span class="number">667px</span>), only screen and (max-width: <span class="number">480px</span>) and (orientation : portrait)&#123;</span><br><span class="line">     <span class="comment">/*iPhone 6 and iPhone 6+ portrait*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">media</span> only screen and (max-device-width: <span class="number">640px</span>), only screen and (max-device-width: <span class="number">667px</span>), only screen and (max-width: <span class="number">480px</span>) and (orientation : landscape)&#123;</span><br><span class="line">     <span class="comment">/*iPhone 6 and iPhone 6+ landscape*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><ul>
+<li><a href="http://www.w3cmark.com/2014/354.html" target="_blank" rel="noopener">w3cmark</a></li>
+<li><a href="http://nmsdvid.com/snippets/" target="_blank" rel="noopener">Media Queries</a></li>
+<li><a href="http://www.w3cplus.com/node/715" target="_blank" rel="noopener">w3cplus</a></li>
+<li><a href="http://www.xumenglong.com/code/mobile_base/demo1.html" target="_blank" rel="noopener">判断 iPad 和 iPhone 的版本和状态的 CSS 媒体查询代码(包括iphone6与iphone6 plus)</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Eilvein</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://eilvein.cn/2014/03/16/移动端页面设计规范/">http://eilvein.cn/2014/03/16/移动端页面设计规范/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY<strong>?</strong></strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/移动端/"># 移动端</a>
+                    
+                        <a href="/tags/设计规范/"># 设计规范</a>
+                    
+                        <a href="/tags/UI/"># UI</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2016/01/10/WebApp开发规范整理/">WebApp开发规范整理</a>
+            
+            
+            <a class="next" rel="next" href="/2013/05/12/移动端开发常用总结/">移动端开发常用总结</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <p>© 2003-2019 Eilvein 京ICP备xxxxxxxx号-1</p>
+        <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a></p>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="description" content="eilvein">
+
+
+    <meta name="keywords" content="eilvein">
+
+
+<title>WebApp开发规范整理 | 标题</title>
+
+
+
+    <link rel="icon" href="/favicon.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Eilvein&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Eilvein&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">WebApp开发规范整理</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Eilvein</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 10, 2016&nbsp;&nbsp;18:50:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Front-End/">Front-End</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>以下整理来自于网上或自己常用的移动开发规范</p>
+</blockquote>
+<h4 id="字体设置"><a href="#字体设置" class="headerlink" title="字体设置"></a>字体设置</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">"Helvetica Neue"</span>, Helvetica, STHeiTi, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="selector-tag">html</span> ,<span class="selector-tag">body</span>&#123;</span><br><span class="line"> overflow-x: hidden; //如果页面可以拖动离开浏览器窗口，尝试试试这个</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="基础交互"><a href="#基础交互" class="headerlink" title="基础交互"></a>基础交互</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">a</span>, <span class="selector-tag">img</span> &#123;</span><br><span class="line">    <span class="attribute">-webkit-touch-callout</span>: none; <span class="comment">/* 禁止长按链接与图片弹出菜单 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">html</span>, <span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">-webkit-user-select</span>: none;   <span class="comment">/* 禁止选中文本（如无文本选中需求，此为必选项） */</span></span><br><span class="line">    <span class="attribute">user-select</span>: none;</span><br><span class="line">    <span class="attribute">-webkit-tap-highlight-color</span>: <span class="built_in">rgba</span>(0, 0, 0, 0);</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">a</span>,<span class="selector-tag">input</span>,<span class="selector-tag">button</span> &#123;</span><br><span class="line"><span class="attribute">outline</span>:none // 按钮点击之后会有边框</span><br><span class="line">&#125;</span><br><span class="line">*,*<span class="selector-pseudo">:before</span>,*<span class="selector-pseudo">:after</span>&#123;</span><br><span class="line">    <span class="attribute">-webkit-box-sizing</span>:border-box;</span><br><span class="line">    <span class="attribute">box-sizing</span>:border-box;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="viewport"><a href="#viewport" class="headerlink" title="viewport"></a>viewport</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>（Hybrid）   Android 4.4.x meta viewport 默认不起作用，需要创建webview的时候设置</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WebSettings settings = webView.getSettings();</span><br><span class="line">settings.setLoadWithOverviewMode(<span class="literal">true</span>);</span><br><span class="line">settings.setUseWideViewPort(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<p>其他meta</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=utf-8"</span>&gt;</span>       //编码</span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"apple-mobile-web-app-capable"</span> <span class="attr">content</span>=<span class="string">"yes"</span> /&gt;</span>                // 离线应用的另一个技巧         </span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">content</span>=<span class="string">"black"</span> <span class="attr">name</span>=<span class="string">"apple-mobile-web-app-status-bar-style"</span> /&gt;</span>     //指定的iphone中safari顶端的状态条的样式       </span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">content</span>=<span class="string">"telephone=no"</span> <span class="attr">name</span>=<span class="string">"format-detection"</span> /&gt;</span>                   //告诉设备忽略将页面中的数字识别为电话号码     </span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"Author"</span> <span class="attr">contect</span>=<span class="string">"Mr.He"</span>/ &gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="特殊链接"><a href="#特殊链接" class="headerlink" title="特殊链接"></a>特殊链接</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"tel:12345654321"</span>&gt;</span>打电话给我<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"sms:12345654321"</span>&gt;</span>发短信<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">或用于单元格：</span><br><span class="line"><span class="tag">&lt;<span class="name">td</span> <span class="attr">onclick</span>=<span class="string">"location.href='tel:122'"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">x-webkit-speech</span> /&gt;</span> <span class="comment">&lt;!--语音输入--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span> =<span class="string">"image/*; capture=camera"</span> /&gt;</span> <span class="comment">&lt;!--文件上传, 从相机捕获媒体, 下同--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span> = <span class="string">"video/*; capture=camcorder"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span> = <span class="string">"audio/*; capture=microphone"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"sms:18005555555,18005555556"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="comment">&lt;!--发送短信给多个人的链接--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"sms:18005555555?body=helloWorld"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="comment">&lt;!--发送短信附带内容的链接--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"tel:18005555555″&gt;Call us at 1-800-555-5555&lt;/a&gt; &lt;!--拨打电话的链接--&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="手势事件"><a href="#手势事件" class="headerlink" title="手势事件"></a>手势事件</h4><ul>
+<li><p>手势事件</p>
+<blockquote>
+<p>touchstart     //当手指接触屏幕时触发</p>
+<p>touchmove     //当已经接触屏幕的手指开始移动后触发</p>
+<p>touchend     //当手指离开屏幕时触发</p>
+<p>touchcancel</p>
+</blockquote>
+</li>
+</ul>
+<p>IOS safari 浏览器下禁用页面拖动效果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.body.addEventListener(<span class="string">'touchstart'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">ev</span>) </span>&#123;</span><br><span class="line">		ev.preventDefault();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>触摸事件</p>
+<blockquote>
+<p>gesturestart    //当两个手指接触屏幕时触发</p>
+<p>gesturechange    //当两个手指接触屏幕后开始移动时触发</p>
+<p>gestureend</p>
+<p>onorientationchange    // 屏幕旋转事件</p>
+</blockquote>
+</li>
+<li><p>检测触摸屏幕的手指何时改变方向</p>
+<blockquote>
+<p>orientationchange</p>
+</blockquote>
+</li>
+<li><p>touch事件支持的相关属性</p>
+<blockquote>
+<p>touches</p>
+<p>targetTouches</p>
+<p>changedTouches</p>
+<p>clientX　clientY　　　// 相对视口的坐标（不包括滚动）</p>
+<p>screenX screenY 　　　 // 相对屏幕</p>
+<p>pageX pageY　 　　// 相对文档</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="调试工具"><a href="#调试工具" class="headerlink" title="调试工具"></a>调试工具</h4><ul>
+<li><a href="http://people.apache.org/~pmuellr/weinre/" target="_blank" rel="noopener">weinre</a></li>
+<li><a href="http://jsconsole.com/" target="_blank" rel="noopener">jsconsole</a> <a href="https://github.com/remy/jsconsole" target="_blank" rel="noopener">本地部署</a></li>
+<li><a href="http://vorlonjs.com/" target="_blank" rel="noopener">vorlon</a></li>
+<li>对于android4.0 的chrome 以及 4.4之后的webview可以采用浏览器的远程调试<a href="https://developer.chrome.com/devtools/docs/remote-debugging" target="_blank" rel="noopener">官方教程</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Eilvein</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://eilvein.cn/2016/01/10/WebApp开发规范整理/">http://eilvein.cn/2016/01/10/WebApp开发规范整理/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY<strong>?</strong></strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/开发规范/"># 开发规范</a>
+                    
+                        <a href="/tags/移动开发/"># 移动开发</a>
+                    
+                        <a href="/tags/WebApp/"># WebApp</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2017/02/12/Webpack2-升级指南和特性摘要/">Webpack2 升级指南和特性摘要</a>
+            
+            
+            <a class="next" rel="next" href="/2014/03/16/移动端页面设计规范/">移动端页面设计规范</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <p>© 2003-2019 Eilvein 京ICP备xxxxxxxx号-1</p>
+        <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a></p>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

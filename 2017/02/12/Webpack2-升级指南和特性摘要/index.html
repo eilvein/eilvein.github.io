@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="description" content="eilvein">
+
+
+    <meta name="keywords" content="eilvein">
+
+
+<title>Webpack2 升级指南和特性摘要 | 标题</title>
+
+
+
+    <link rel="icon" href="/favicon.png">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Eilvein&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Eilvein&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Webpack2 升级指南和特性摘要</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Eilvein</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 12, 2017&nbsp;&nbsp;17:50:22</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Front-End/">Front-End</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="resolve-root-resolve-fallback-resolve-modulesDirectories"><a href="#resolve-root-resolve-fallback-resolve-modulesDirectories" class="headerlink" title="resolve.root, resolve.fallback, resolve.modulesDirectories"></a><code>resolve.root</code>, <code>resolve.fallback</code>, <code>resolve.modulesDirectories</code></h2><p>上述三个选项将被合并为一个标准配置项：resolve.modules. 更多关于resolve的信息信息可查阅 <a href="https://webpack.js.org/configuration/resolve/" target="_blank" rel="noopener">resolving</a>.</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  resolve: &#123;</span><br><span class="line"><span class="deletion">-   root: path.join(__dirname, "src")</span></span><br><span class="line"><span class="addition">+   modules: [</span></span><br><span class="line"><span class="addition">+     path.join(__dirname, "src"),</span></span><br><span class="line"><span class="addition">+     "node_modules"</span></span><br><span class="line"><span class="addition">+   ]</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="resolve-extensions"><a href="#resolve-extensions" class="headerlink" title="resolve.extensions"></a><code>resolve.extensions</code></h2><p>该配置项将不再要求强制转入一个空字符串，而被改动到了resolve.enforceExtension下， 更多关于resolve的信息信息可查阅 <a href="https://webpack.js.org/configuration/resolve/" target="_blank" rel="noopener">resolving</a>.</p>
+<h2 id="resolve"><a href="#resolve" class="headerlink" title="resolve.*"></a><code>resolve.*</code></h2><p>更多相关改动和一些不常用的配置项在此不一一列举，大家如果在实际项目中用到可以到<a href="[resolving](https://webpack.js.org/configuration/resolve/)">resolving</a>中进行查看.</p>
+<h2 id="module-loaders-将变为-module-rules"><a href="#module-loaders-将变为-module-rules" class="headerlink" title="module.loaders 将变为 module.rules"></a><code>module.loaders</code> 将变为 <code>module.rules</code></h2><p>旧版本中loaders配置项将被功能更为强大的rules取代，同时考虑到新旧版本的兼容，之前旧版本的<code>module.loaders</code>的相关写法仍旧有效，loaders中的相关配置项也依旧可以被识别。</p>
+<p>新的loader配置规则会变得更加通俗易用，因此官方也非常推荐用户能及时按<code>module.rules</code>中的相关配置进行调整升级。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line"><span class="deletion">-   loaders: [</span></span><br><span class="line"><span class="addition">+   rules: [</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.css$/,</span><br><span class="line"><span class="deletion">-       loaders: [</span></span><br><span class="line"><span class="addition">+       use: [</span></span><br><span class="line">          &#123;</span><br><span class="line">            loader: "style-loader"</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: "css-loader",</span><br><span class="line"><span class="deletion">-           query: &#123;</span></span><br><span class="line"><span class="addition">+           options: &#123;</span></span><br><span class="line">              modules: true</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.jsx$/,</span><br><span class="line">        loader: "babel-loader", // Do not use "use" here</span><br><span class="line">        options: &#123;</span><br><span class="line">          // ...</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="链式loaders"><a href="#链式loaders" class="headerlink" title="链式loaders"></a>链式loaders</h2><p>同webpack1.X中类似，loaders继续支持链式写法，可将相关正则匹配到的文件资源数据在几个loader之间进行共享传递，详细使用说明可见 <a href="https://webpack.js.org/configuration/module/#rule-use" target="_blank" rel="noopener">rule.use</a>。</p>
+<p>在wepback2中，用户可通过<code>use</code>项来指定需要用到的loaders列表（官方推荐），而在weback1中，如果需要配置多个loaders则需要依靠简单的<code>!</code>符来切分，这种语法出于新旧兼容的考虑，只会在<code>module.loaders</code>中生效。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line"><span class="deletion">-   loaders: &#123;</span></span><br><span class="line"><span class="addition">+   rules: &#123;</span></span><br><span class="line">      test: /\.less$/,</span><br><span class="line"><span class="deletion">-     loader: "style-loader!css-loader!less-loader"</span></span><br><span class="line"><span class="addition">+     use: [</span></span><br><span class="line"><span class="addition">+       "style-loader",</span></span><br><span class="line"><span class="addition">+       "css-loader",</span></span><br><span class="line"><span class="addition">+       "less-loader"</span></span><br><span class="line"><span class="addition">+     ]</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>##<code>module</code>名称后自动自动补全 <code>-loader</code>的功能将被移除</p>
+<p>在配置loader时，官方不再允许省略<code>-loader</code>扩展名，loader的配置写法上将逐步趋于严谨。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        use: [</span><br><span class="line"><span class="deletion">-         "style",</span></span><br><span class="line"><span class="addition">+         "style-loader",</span></span><br><span class="line"><span class="deletion">-         "css",</span></span><br><span class="line"><span class="addition">+         "css-loader",</span></span><br><span class="line"><span class="deletion">-         "less",</span></span><br><span class="line"><span class="addition">+         "less-loader",</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，如果你想继续保持之前的省略写法，你写可以在<code>resolveLoader.moduleExtensions</code>中开启默认扩展名配置，不过这种做法并不被推荐。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+ resolveLoader: &#123;</span></span><br><span class="line"><span class="addition">+   moduleExtensions: ["-loader"]</span></span><br><span class="line"><span class="addition">+ &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以从这里查看 <a href="https://github.com/webpack/webpack/issues/2986" target="_blank" rel="noopener">#2986</a>此次变更的原因；</p>
+<h2 id="json-loader无需要独立安装"><a href="#json-loader无需要独立安装" class="headerlink" title="json-loader无需要独立安装"></a><code>json-loader</code>无需要独立安装</h2><p>当我们需要读取json格式文件时，我们不再需要安装任何loader，webpack2中将会内置  <a href="https://github.com/webpack/json-loader" target="_blank" rel="noopener">json-loader</a>，自动支持json格式的读取（喜大普奔啊）。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line"><span class="deletion">-     &#123;</span></span><br><span class="line"><span class="deletion">-       test: /\.json/,</span></span><br><span class="line"><span class="deletion">-       loader: "json-loader"</span></span><br><span class="line"><span class="deletion">-     &#125;</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/webpack/webpack/issues/3363" target="_blank" rel="noopener">为何需要默认支持json格式</a>官方的解释是为了在webpack, node.js and browserify三种构建环境下提供无差异的开发体验。</p>
+<h2 id="loader配置项将默认从context中读取"><a href="#loader配置项将默认从context中读取" class="headerlink" title="loader配置项将默认从context中读取"></a><code>loader</code>配置项将默认从<code>context</code>中读取</h2><p>在webpack 1中的一些特殊的loader在读取对应资源时，需要通过<code>require.resolve</code>指定后才能指定生效。从webpack 2后，配置loader在直接从<code>context</code>中进行读取，这就解决了一些在使用“npm链接”或引用模块之外的<code>context</code>造成的模块重复导入的问题。</p>
+<p>配置中可以删除如下代码：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        // ...</span><br><span class="line"><span class="deletion">-       loader: require.resolve("my-loader")</span></span><br><span class="line"><span class="addition">+       loader: "my-loader"</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  resolveLoader: &#123;</span><br><span class="line"><span class="deletion">-   root: path.resolve(__dirname, "node_modules")</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="module-preLoaders-和-module-postLoaders-将被移除"><a href="#module-preLoaders-和-module-postLoaders-将被移除" class="headerlink" title="module.preLoaders 和 module.postLoaders  将被移除"></a><code>module.preLoaders</code> 和 <code>module.postLoaders</code>  将被移除</h2><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  module: &#123;</span><br><span class="line"><span class="deletion">-   preLoaders: [</span></span><br><span class="line"><span class="addition">+   rules: [</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.js$/,</span><br><span class="line"><span class="addition">+       enforce: "pre",</span></span><br><span class="line">        loader: "eslint-loader"</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前需要用到preLoader的地方可以改到rules的enfore中进行配置。</p>
+<h2 id="UglifyJsPlugin中的-sourceMap配置项将默认关闭"><a href="#UglifyJsPlugin中的-sourceMap配置项将默认关闭" class="headerlink" title="UglifyJsPlugin中的 sourceMap配置项将默认关闭"></a><code>UglifyJsPlugin</code>中的 <code>sourceMap</code>配置项将默认关闭</h2><p><code>UglifyJsPlugin</code>中的<code>sourceMap</code> 默认项将从 <code>true</code>变为 <code>false</code>。</p>
+<p>这就意味着当你的js编译压缩后，需要继续读取原始脚本信息的行数，位置，警告等有效调试信息时，你需要手动开启<code>UglifyJsPlugin</code> 的配置项：<code>sourceMap: true</code> 。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  devtool: "source-map",</span><br><span class="line">  plugins: [</span><br><span class="line">    new UglifyJsPlugin(&#123;</span><br><span class="line"><span class="addition">+     sourceMap: true</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="UglifyJsPlugin-的警告配置将默认关闭"><a href="#UglifyJsPlugin-的警告配置将默认关闭" class="headerlink" title="UglifyJsPlugin 的警告配置将默认关闭"></a><code>UglifyJsPlugin</code> 的警告配置将默认关闭</h2><p><code>UglifyJsPlugin</code>中的 <code>compress.warnings</code> 默认项将从 <code>true</code>变为 <code>false</code>。</p>
+<p>这就意味着当你想在编译压缩的时候查看一部分js的警告信息时，你需要将<code>compress.warnings</code> 手动设置为 <code>true</code>。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  devtool: "source-map",</span><br><span class="line">  plugins: [</span><br><span class="line">    new UglifyJsPlugin(&#123;</span><br><span class="line"><span class="addition">+     compress: &#123;</span></span><br><span class="line"><span class="addition">+       warnings: true</span></span><br><span class="line"><span class="addition">+     &#125;</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="UglifyJsPlugin-不再支持让-Loaders-最小化文件的模式了"><a href="#UglifyJsPlugin-不再支持让-Loaders-最小化文件的模式了" class="headerlink" title="UglifyJsPlugin 不再支持让 Loaders 最小化文件的模式了"></a><code>UglifyJsPlugin</code> 不再支持让 <code>Loaders</code> 最小化文件的模式了</h2><p><code>UglifyJsPlugin</code> 将不再支持让 Loaders 最小化文件的模式。<code>debug</code> 选项已经被移除。Loaders 不能从 webpack 的配置中读取到他们的配置项。</p>
+<p><strong>loader</strong>的最小化文件模式将会在webpack 3或者后续版本中被彻底取消掉.</p>
+<p>为了兼容部分旧式loader，你可以通过 <code>LoaderOptionsPlugin</code> 的配置项来提供这些功能。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  plugins: [</span><br><span class="line"><span class="addition">+   new webpack.LoaderOptionsPlugin(&#123;</span></span><br><span class="line"><span class="addition">+     minimize: true</span></span><br><span class="line"><span class="addition">+   &#125;)</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="DedupePlugin-已经被移除"><a href="#DedupePlugin-已经被移除" class="headerlink" title="DedupePlugin 已经被移除"></a><code>DedupePlugin</code> 已经被移除</h2><p><code>webpack.optimize.DedupePlugin</code> 不再需要. 从你以前的配置移除这个配置选项.</p>
+<h2 id="BannerPlugin-配置项将有所改变"><a href="#BannerPlugin-配置项将有所改变" class="headerlink" title="BannerPlugin 配置项将有所改变"></a><code>BannerPlugin</code> 配置项将有所改变</h2><p><code>BannerPlugin</code> 将不再允许接受两个参数，而是只提供一个对象配置项.</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  plugins: [</span><br><span class="line"><span class="deletion">-    new webpack.BannerPlugin('Banner', &#123;raw: true, entryOnly: true&#125;);</span></span><br><span class="line"><span class="addition">+    new webpack.BannerPlugin(&#123;banner: 'Banner', raw: true, entryOnly: true&#125;);</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="OccurrenceOrderPlugin-将被内置加入"><a href="#OccurrenceOrderPlugin-将被内置加入" class="headerlink" title="OccurrenceOrderPlugin 将被内置加入"></a><code>OccurrenceOrderPlugin</code> 将被内置加入</h2><p>不需要再针对<code>OccurrenceOrderPlugin</code>进行配置</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  plugins: [</span><br><span class="line"><span class="deletion">-   new webpack.optimize.OccurrenceOrderPlugin()</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="ExtractTextWebpackPlugin配置项将有所改变"><a href="#ExtractTextWebpackPlugin配置项将有所改变" class="headerlink" title="ExtractTextWebpackPlugin配置项将有所改变"></a><code>ExtractTextWebpackPlugin</code>配置项将有所改变</h2><p><a href="https://github.com/webpack/extract-text-webpack-plugin" target="_blank" rel="noopener">ExtractTextPlugin</a> ] 1.0.0 在webpack v2将无法使用，你需要重新指定安装<code>ExtractTextPlugin</code> 的webpack2的适配版本.</p>
+<p><code>npm install --save-dev extract-text-webpack-plugin@beta</code></p>
+<p> 更新后的<code>ExtractTextPlugin</code>版本会针对wepback2进行相应的调整。</p>
+<h3 id="ExtractTextPlugin-extract的配置书写方式将调整"><a href="#ExtractTextPlugin-extract的配置书写方式将调整" class="headerlink" title="ExtractTextPlugin.extract的配置书写方式将调整"></a><code>ExtractTextPlugin.extract</code>的配置书写方式将调整</h3><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">module: &#123;</span><br><span class="line">  rules: [</span><br><span class="line">    test: /.css$/,</span><br><span class="line"><span class="deletion">-    loader: ExtractTextPlugin.extract("style-loader", "css-loader", &#123; publicPath: "/dist" &#125;)</span></span><br><span class="line"><span class="addition">+    loader: ExtractTextPlugin.extract(&#123;</span></span><br><span class="line"><span class="addition">+      fallbackLoader: "style-loader",</span></span><br><span class="line"><span class="addition">+      loader: "css-loader",</span></span><br><span class="line"><span class="addition">+      publicPath: "/dist"</span></span><br><span class="line"><span class="addition">+    &#125;)</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="new-ExtractTextPlugin-options-的配置书写方式将调整"><a href="#new-ExtractTextPlugin-options-的配置书写方式将调整" class="headerlink" title="new ExtractTextPlugin({options})的配置书写方式将调整"></a><code>new ExtractTextPlugin({options})</code>的配置书写方式将调整</h3><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line"><span class="deletion">-  new ExtractTextPlugin("bundle.css", &#123; allChunks: true, disable: false &#125;)</span></span><br><span class="line"><span class="addition">+  new ExtractTextPlugin(&#123;</span></span><br><span class="line"><span class="addition">+    filename: "bundle.css",</span></span><br><span class="line"><span class="addition">+    disable: false,</span></span><br><span class="line"><span class="addition">+    allChunks: true</span></span><br><span class="line"><span class="addition">+  &#125;)</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h2 id="全量动态加载资源将默认失效"><a href="#全量动态加载资源将默认失效" class="headerlink" title="全量动态加载资源将默认失效"></a>全量动态加载资源将默认失效</h2><p>只有使用一个表达式的资源依赖引用(i. e.<code>require(expr)</code>)，现在将创建一个空的context，而不是一个context的完整目录。</p>
+<p>当在es2015的模块化中无法工作时，请最好重构这部分的代码，如果无法进行修改这部分代码，你可以在<code>ContextReplacementPlugin</code>中来提示编译器做出正确处理。</p>
+<p>###Cli使用自定义参数作为配置项传入方式将做调整</p>
+<p>如果你随意将自定义参数通过cli传入到配置项中，如：</p>
+<p><code>webpack --custom-stuff</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">var</span> customStuff = process.argv.indexOf(<span class="string">"--custom-stuff"</span>) &gt;= <span class="number">0</span>;</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"><span class="built_in">module</span>.exports = config;</span><br></pre></td></tr></table></figure>
+
+<p>你会发现这将不会被允许，cli的执行将会遵循更为严格的标准。</p>
+<p>取而代之的是用一个接口来做传递参数配置。这应该是新的代替方案，未来的工具开发也可能依赖于此。</p>
+<p><code>webpack --env.customStuff</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">env</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> customStuff = env.customStuff;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">  <span class="keyword">return</span> config;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>查看更多介绍 <a href="https://webpack.js.org/api/cli/" target="_blank" rel="noopener">CLI</a>.</p>
+<p>##<code>require.ensure</code> 和 <code>AMD require</code>将采用异步式调用</p>
+<p><code>require.ensure</code>和<code>amd require</code>将默认采用异步的加载方式来调用，而非之前的当模块请求加载完成后再在回调函数中同步触发。</p>
+<p><code>require.ensure</code><strong>将基于原生的</strong><code>Promise</code><strong>对象重新实现，当你在使用</strong> <code>require.ensure</code> <strong>时请确保你的运行环境默认支持Promise对象，如果缺少则推荐使用安装polyfill.</strong></p>
+<h2 id="Loader的配置项将通过options来设置"><a href="#Loader的配置项将通过options来设置" class="headerlink" title="Loader的配置项将通过options来设置"></a>Loader的配置项将通过<code>options</code>来设置</h2><p>在<code>webpack.config.js</code>中将不再允许使用自定义属性来配置loder，这直接带来的一个影响是：在<code>ts</code>配置项中的自定义属性将无法在被在webpack2中正确使用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">      loader: <span class="string">'ts-loader'</span></span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// does not work with webpack 2</span></span><br><span class="line">  ts: &#123; <span class="attr">transpileOnly</span>: <span class="literal">false</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="什么是-options"><a href="#什么是-options" class="headerlink" title="什么是 options?"></a>什么是 <code>options</code>?</h3><p>这是一个非常好的提问，严格意义上来说，<code>custom property</code>和<code>options</code>均是用于webpack loader的配置方式，从更通俗的说法上看，<code>options</code>应该被称作<code>query</code>，作为一种类似字符串的形式被追加到每一个loader的命名后面，非常类似我们用于url中的查询字符串，但在实际应用中功能要更为<a href="https://github.com/webpack/loader-utils#parsequery" target="_blank" rel="noopener">强大</a>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">      loader: <span class="string">'ts-loader?'</span> + <span class="built_in">JSON</span>.stringify(&#123; <span class="attr">transpileOnly</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>options也可作为一个独立的字面对象量，在loader的配置中搭配使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">      loader: <span class="string">'ts-loader'</span>,</span><br><span class="line">      options:  &#123; <span class="attr">transpileOnly</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="LoaderOptionsPlugin-context"><a href="#LoaderOptionsPlugin-context" class="headerlink" title="LoaderOptionsPlugin context"></a><code>LoaderOptionsPlugin</code> context</h2><p>部分loader需要配置<code>context</code>信息， 并且支持从配置文件中读取。这需要loader通过用长选项传递进来，更多<code>loader</code>的明细配置项可以查阅相关文档。</p>
+<p>为了兼容部分旧式的loader配置，也可以采用如下插件的形式来进行配置：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  plugins: [</span><br><span class="line"><span class="addition">+   new webpack.LoaderOptionsPlugin(&#123;</span></span><br><span class="line"><span class="addition">+     options: &#123;</span></span><br><span class="line"><span class="addition">+       context: __dirname</span></span><br><span class="line"><span class="addition">+     &#125;</span></span><br><span class="line"><span class="addition">+   &#125;)</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a><code>debug</code></h2><p><code>debug</code>作为loader中的一个调试模式选项，可以在webpack1的配置中灵活切换。在webpack2中，则需要<code>loader</code>通过用长选项传递进来，更多loader的明细配置项可以查阅相关文档。</p>
+<p>loder的<code>debug</code>模式在webpack3.0或者后续版本中将会被移除。</p>
+<p>为了兼容部分旧式的loader配置，也可以采用如下插件的形式来进行配置：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- debug: true,</span></span><br><span class="line">  plugins: [</span><br><span class="line"><span class="addition">+   new webpack.LoaderOptionsPlugin(&#123;</span></span><br><span class="line"><span class="addition">+     debug: true</span></span><br><span class="line"><span class="addition">+   &#125;)</span></span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Code-Splitting-with-ES2015"><a href="#Code-Splitting-with-ES2015" class="headerlink" title="Code Splitting with ES2015"></a>Code Splitting with ES2015</h2><p>在webpack1中，你需要使用<code>require.ensure</code>实现<code>chunks</code>的懒加载，如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.ensure([], <span class="function"><span class="keyword">function</span>(<span class="params">require</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> foo = <span class="built_in">require</span>(<span class="string">"./module"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在es2015的 loader中通过定义<code>import()</code>作为资源加载方法，当读取到符合ES2015规范的模块时，可实现模块中的内容在运行时动态加载。</p>
+<p>webpack在处理<code>import()</code>时可以实现按需提取开发中所用到的模块资源，再写入到各个独立的chunk中。webpack2已经支持原生的 ES6 的模块加载器了，这意味着 webpack 2 能够理解和处理 <code>import</code>和<code>export</code>了。</p>
+<p><code>import()</code>支持将模块名作为参数出入并且返回一个<code>Promise</code>对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onClick</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">import</span>(<span class="string">"./module"</span>).then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">module</span>.default;</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"Chunk loading failed"</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样做的还有一个额外的好处就是当我们的模块加载失败时也可以被捕获到了，因为这些都会遵循<code>Promise</code>的标准来实现。</p>
+<p>值得注意的地方：<code>require.ensure</code>的第三个参数选项允许使用简单的chunk命名方式，但是<code>import</code> API中将不被支持，如果你希望继续采用函数式的写法，你可以继续使用<code>require.ensure</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.ensure([], <span class="function"><span class="keyword">function</span>(<span class="params">require</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> foo = <span class="built_in">require</span>(<span class="string">"./module"</span>);</span><br><span class="line">&#125;, <span class="string">"custom-chunk-name"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>（注： <code>System.import</code>将会被弃用，webpack中将不再推荐使用 <code>System.import</code>，官方也推荐使用<code>import</code>进行替换，详见 <a href="https://github.com/webpack/webpack/releases/tag/v2.1.0-beta.28" target="_blank" rel="noopener">v2.1.0-beta.28</a>)</p>
+<p>如果想要继续使用<a href="http://babeljs.io/" target="_blank" rel="noopener">Babel</a>中提供的<code>import</code>，你需要独立安装 <a href="http://babeljs.io/docs/plugins/syntax-dynamic-import/" target="_blank" rel="noopener">dynamic-import</a> 插件并且选择babel的<code>Stage 3</code>来捕获时的错误， 当然这也可以根据实际情况来操作而不做强制约束。</p>
+<h2 id="Dynamic-expressions动态表达式"><a href="#Dynamic-expressions动态表达式" class="headerlink" title="Dynamic expressions动态表达式"></a>Dynamic expressions动态表达式</h2><p>现在<code>import()</code>中的传参可支持部分表达式的写法了，如果之前有接触过CommonJS中<code>require()</code>表达式写法，应该不会对此感到陌生,（它的操作其实和 CommonJS 是类似的，给所有可能的文件创建一个环境，当你传递那部分代码的模块还不确定的时候，webpack 会自动生成所有可能的模块，然后根据需求加载。这个特性在前端路由的时候很有用，可以实现按需加载资源）</p>
+<p><code>import()</code> 会针对每一个读取到的module创建独立的<code>separte chunk</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">route</span>(<span class="params">path, query</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">import</span>(<span class="string">`./routes/<span class="subst">$&#123;path&#125;</span>/route`</span>)</span><br><span class="line">    .then(<span class="function"><span class="params">route</span> =&gt;</span> <span class="keyword">new</span> route.Route(query));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// This creates a separate chunk for each possible route</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="可以混用-ES2015-和-AMD-和-CommonJS"><a href="#可以混用-ES2015-和-AMD-和-CommonJS" class="headerlink" title="可以混用 ES2015 和 AMD 和 CommonJS"></a>可以混用 ES2015 和 AMD 和 CommonJS</h2><p>在 AMD 和 CommonJS 模块加载器中，你可以混合使用所有（三种）的模块类型（即使是在同一个文件里面）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CommonJS consuming ES2015 Module</span></span><br><span class="line"><span class="keyword">var</span> book = <span class="built_in">require</span>(<span class="string">"./book"</span>);</span><br><span class="line"></span><br><span class="line">book.currentPage;</span><br><span class="line">book.readPage();</span><br><span class="line">book.default === <span class="string">"This is a book"</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES2015 Module consuming CommonJS</span></span><br><span class="line"><span class="keyword">import</span> fs <span class="keyword">from</span> <span class="string">"fs"</span>; <span class="comment">// module.exports map to default</span></span><br><span class="line"><span class="keyword">import</span> &#123; readFileSync &#125; <span class="keyword">from</span> <span class="string">"fs"</span>; <span class="comment">// named exports are read from returned object+</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> fs.readFileSync === <span class="string">"function"</span>;</span><br><span class="line"><span class="keyword">typeof</span> readFileSync === <span class="string">"function"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>注：<code>es2015 balel</code> 的默认预处理会把 ES6 模块加载器转化成 CommonJS 模块加载。要是想使用 webpack 新增的对原生 ES6 模块加载器的支持，你需要使用 <code>es2015-webpack</code> 来代替，另外如果你希望继续使用babel，则需要通过配置babel项，使其不会强制解析这部分的module symbols以便webpack能正确使用它们，babel的配置如下：</p>
+<p><strong>.babelrc</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"presets"</span>: [</span><br><span class="line">    [<span class="string">"es2015"</span>, &#123; <span class="attr">"modules"</span>: <span class="literal">false</span> &#125;]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hints"><a href="#Hints" class="headerlink" title="Hints"></a>Hints</h2><p>No need to change something, but opportunities</p>
+<h3 id="Template-strings模板字符串"><a href="#Template-strings模板字符串" class="headerlink" title="Template strings模板字符串"></a>Template strings模板字符串</h3><p>webpack中的资源参数已经开始支持模板字符串了，这意味着你可以使用如下的配置写法：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- require("./templates/" + name);</span></span><br><span class="line"><span class="addition">+ require(`./templates/$&#123;name&#125;`);</span></span><br></pre></td></tr></table></figure>
+
+<p>###配置支持项支持Promise</p>
+<p>webpack现在在配置文件项中返回<code>Promise</code>了，这就允许你在配置中可以进行一些异步的写法了，如下所示：</p>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> fetchLangs().then(<span class="function"><span class="params">lang</span> =&gt;</span> (&#123;</span><br><span class="line">    entry: <span class="string">"..."</span>,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    plugins: [</span><br><span class="line">      <span class="keyword">new</span> DefinePlugin(&#123; <span class="attr">LANGUAGE</span>: lang &#125;)</span><br><span class="line">    ]</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Loader匹配支持更多的高级写法"><a href="#Loader匹配支持更多的高级写法" class="headerlink" title="Loader匹配支持更多的高级写法"></a>Loader匹配支持更多的高级写法</h3><p>webpack中的loader配置支持如下写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  rules: [</span><br><span class="line">    &#123;</span><br><span class="line">      resource: <span class="regexp">/filename/</span>, <span class="comment">// matches "/path/filename.js"</span></span><br><span class="line">      resourceQuery: <span class="regexp">/querystring/</span>, <span class="comment">// matches "/filename.js?querystring"</span></span><br><span class="line">      issuer: <span class="regexp">/filename/</span>, <span class="comment">// matches "/path/something.js" if requested from "/path/filename.js"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更多的CLI参数项"><a href="#更多的CLI参数项" class="headerlink" title="更多的CLI参数项"></a>更多的CLI参数项</h3><p>如下有更多的CLI 参数项可用:</p>
+<p><code>--define process.env.NODE_ENV=&quot;production&quot;</code> 支持直接配置<code>DefinePlugin</code>.</p>
+<p><code>--display-depth</code> 能显示每个entry中的module的资源深度</p>
+<p><code>--display-used-exports</code> 能显示每个module中依赖使用了哪些资源.</p>
+<p><code>--display-max-modules</code>能限制显示output中引用到的资源数量 (默认显示15个).</p>
+<p>-p 指定当前的编译环境为生产环境，即修改：<code>process.env.NODE_ENV</code> 为 <code>&quot;production&quot;</code></p>
+<h3 id="Cacheable缓存项"><a href="#Cacheable缓存项" class="headerlink" title="Cacheable缓存项"></a>Cacheable缓存项</h3><p>Loaders现在将默认开启资源缓存了，如果你不希望loader读缓存则需要在配置中指明：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  // Cacheable loader</span><br><span class="line">  module.exports = function(source) &#123;</span><br><span class="line"><span class="deletion">-   this.cacheable();</span></span><br><span class="line">    return source;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  // Not cacheable loader</span><br><span class="line">  module.exports = function(source) &#123;</span><br><span class="line"><span class="addition">+   this.cacheable(false);</span></span><br><span class="line">    return source;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Complex-options复合参数项写法"><a href="#Complex-options复合参数项写法" class="headerlink" title="Complex options复合参数项写法"></a>Complex options复合参数项写法</h3><p>webpack1中的loader参数项中只支持<code>JSON.stringify-able</code>这种json字符串的写法；</p>
+<p>webpack2中的loader参数项中已经可以支持任意的JS对象的写法了。</p>
+<p>使用复合选项时会有一个限制，你需要配置一个<code>ident</code>作为项来保证能正确引用到其他的loader，这意味着通过配置我们可以在内联写法中去调用对应依赖的加载器，如下：</p>
+<p><code>require(&quot;some-loader??by-ident!resource&quot;)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  test: <span class="regexp">/.../</span>,</span><br><span class="line">  loader: <span class="string">"..."</span>,</span><br><span class="line">  options: &#123;</span><br><span class="line">    ident: <span class="string">"by-ident"</span>,</span><br><span class="line">    magic: <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">return</span> <span class="built_in">Math</span>.random()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种写法在平常开发中用的不算多，但是有一种场景下会比较有用，就是当我们的loader需要去生成独立的代码片段时，如，我们在使用s<code>tyle-loader</code>生成一个模块时，需要依赖前面的loader计算的结果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// style-loader generated code (simplified)</span></span><br><span class="line"><span class="keyword">var</span> addStyle = <span class="built_in">require</span>(<span class="string">"./add-style"</span>);</span><br><span class="line"><span class="keyword">var</span> css = <span class="built_in">require</span>(<span class="string">"-!css-loader?&#123;"</span>modules<span class="string">":true&#125;!postcss-loader??postcss-ident"</span>);</span><br><span class="line"></span><br><span class="line">addStyle(css);</span><br></pre></td></tr></table></figure>
+
+<p>在这种复杂选项的使用时<code>ident</code>就有用武之地了。</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>webpack2无论是从优化资源配置项，到向es6 module，Promise等新标准接轨，再到编译环境和性能的优化，再到API设计的整体规范性上，相对V1的改进还是非常显著的，希望大家多多尝试，及时反馈交流，让webapck的生态圈变得日益活跃强大。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Eilvein</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://eilvein.cn/2017/02/12/Webpack2-升级指南和特性摘要/">http://eilvein.cn/2017/02/12/Webpack2-升级指南和特性摘要/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY<strong>?</strong></strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Webpack/"># Webpack</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/12/Hello2019/">Hello 2019</a>
+            
+            
+            <a class="next" rel="next" href="/2016/01/10/WebApp开发规范整理/">WebApp开发规范整理</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <p>© 2003-2019 Eilvein 京ICP备xxxxxxxx号-1</p>
+        <p>Powered by <a href="https://hexo.io" target="_blank">Hexo</a></p>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
